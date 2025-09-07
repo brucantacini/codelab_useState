@@ -1,5 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
+import quotesData from "./data/quotes.json";
 
 export default function App() {
   return (
@@ -9,6 +10,13 @@ export default function App() {
     </View>
   );
 }
+
+const motivationalQuotes = quotesData.quotes.filter(
+  (q) => q.category !== "religious"
+);
+const religiousQuotes = quotesData.quotes.filter(
+  (q) => q.category === "religious"
+);
 
 const styles = StyleSheet.create({
   container: {
