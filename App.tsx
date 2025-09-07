@@ -3,23 +3,9 @@ import { StyleSheet, Text, View } from 'react-native';
 import quotesData from "./data/quotes.json";
 import Header from "./components/header";
 import Footer from "./components/Footer";
-
-export default function App() {
-  function handleMotivationalRefresh() {}
-  function handleReligiousRefresh() {}
-
-  return (
-    <View style={styles.container}>
-      <Header />
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="auto" />
-      <Footer
-        onRefreshMotivational={handleMotivationalRefresh}
-        onRefreshReligious={handleReligiousRefresh}
-      />
-    </View>
-  );
-}
+import { useState } from "react";
+import { getRandomItem } from "./utils/random";
+import Quote from "./components/Quote";
 
 const motivationalQuotes = quotesData.quotes.filter(
   (q) => q.category !== "religious"
@@ -27,6 +13,37 @@ const motivationalQuotes = quotesData.quotes.filter(
 const religiousQuotes = quotesData.quotes.filter(
   (q) => q.category === "religious"
 );
+
+export default function App() {
+  const [motivational, setMotivational] = useState(
+    getRandomItem(motivationalQuotes)
+  );
+  const [religious, setReligious] = useState(getRandomItem(religiousQuotes));
+
+  function handleMotivationalRefresh() {
+    setMotivational(getRandomItem(motivationalQuotes));
+  }
+  function handleReligiousRefresh() {
+    setReligious(getRandomItem(religiousQuotes));
+  }
+
+  return (
+    <View style={styles.container}>
+      <Header />
+      <Quote text={motivational.text} author={motivational.author} />
+      <Quote
+        text={religious.text}
+        author={religious.author}
+        type={religious.category}
+      />
+      <Footer
+        onRefreshMotivational={handleMotivationalRefresh}
+        onRefreshReligious={handleReligiousRefresh}
+      />
+      <StatusBar style="auto" />
+    </View>
+  );
+}
 
 const styles = StyleSheet.create({
   container: {
